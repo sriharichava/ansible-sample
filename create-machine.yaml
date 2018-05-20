@@ -1,0 +1,26 @@
+- name: Provison Ec2 Instance
+  hosts: localhost
+  tasks:
+    - name: Launch ec2 instance
+      ec2:
+        aws_access_key: <My key>
+        aws_secret_key: <My Secret>
+        region: us-east1
+        key_name: sriharikey
+        instance_type: t2.micro #change if you want bigger machine
+        image: ami-916f59f4 
+        wait: yes
+        group: sg-xxxxxxx
+        count: 1
+        vpc_subnet_id: subnet-994badc2
+        assign_public_ip: yes
+      register: ec2
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        delay: 60
+        timeout: 320
+        state: started
+      with_items: "{{ ec2.instances }}"

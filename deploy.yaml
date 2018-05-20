@@ -1,0 +1,21 @@
+---
+- hosts: webservers
+  vars:
+  - warName: gs-spring-boot-0.1.0.jar
+  - warRemotePath: /opt/apache-tomcat-7.0.61/webapps
+
+  tasks:
+  - name: Download WAR to server
+    command: wget http://ec2-13-57-208-181.us-west-1.compute.amazonaws.com:8081/nexus/content/repositories/releases/org/springframework/gs-spring-boot/0.1.0/gs-spring-boot-0.1.0.jar dest=/opt/apache-tomcat-7.0.61/webapps
+  
+  - name: Unzip WAR file
+    unarchive: src={{ warRemotePath }}/{{ warName }} dest=/var/lib/tomcat/webapps/ROOT/ copy=no mode=0755 owner=tomcat group=tomcat
+    notify:
+        - restart tomcat
+   
+  - name: Delete remote war file
+    file: path={{ warRemotePath }}/{{ warName }} state=absent
+
+  handlers:
+    - name: Restart tomcat
+      service: name=tomcat state=restarted

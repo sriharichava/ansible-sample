@@ -1,0 +1,39 @@
+---
+- hosts: webservers
+  vars:
+    http_port: 8080
+  remote_user: ec2-user
+  tasks:
+    - name: Make sure that we can connect to the machine
+      ping:
+	  
+	- name: Make Sure Apache is running
+      command: 	
+
+    - name: add group "tomcat"
+      group: name=tomcat
+
+    - name: add user "tomcat"
+      user: name=tomcat group=tomcat createhome=yes
+      become: true
+	  become_user: sudo
+
+    - name: Download Tomcat
+      get_url: url=http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz dest=/opt/apache-tomcat-7.0.61.tar.gz
+
+    - name: Extract Tomcat archive
+      command: tar zxvf /opt/apache-tomcat-7.0.61.tar.gz -C /opt/ creates=/opt/apache-tomcat-7.0.61 
+
+    - name: Change ownership of Tomcat installation
+      file: path=/opt/apache-tomcat-7.0.61 owner=tomcat group=tomcat state=directory recurse=yes
+
+    - name: Start Tomcat
+      command: nohup /opt/apache-tomcat-7.0.61/bin/startup.sh
+      become: true
+      become_user: tomcat
+
+    - name: wait for tomcat to start
+      wait_for: port={{http_port}}
+  handlers:
+    - name: start tomcat
+      service: name=tomcat state=started	  
