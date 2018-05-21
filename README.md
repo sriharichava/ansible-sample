@@ -7,8 +7,7 @@ Description: Create & Launch a AWS EC2 instance with Ansible and deploy the samp
        -  Security group with port 80 & 22 opened to our network.
        Code in the create-machine.yaml
        
- 2.Running the playbook:
-    ansible-playbook create-machine.yaml
+ 2.Running the playbook:    ansible-playbook create-machine.yaml
     
  3. get the ip address of the machine created and add in the Hosts file Ref: Hosts
  
@@ -28,7 +27,7 @@ Description: Create & Launch a AWS EC2 instance with Ansible and deploy the samp
      ansible-playbook -i Hosts install_tomcat.yaml
      
   2. Deploy the jar from nexus and restart the tomcat.
-    - ansible-playbook -i Hosts deploy_to_tomcat.yaml
+     ansible-playbook -i Hosts deploy_to_tomcat.yaml
     
     
   
