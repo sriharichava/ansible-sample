@@ -7,7 +7,7 @@
     - name: Make sure that we can connect to the machine
       ping:
 	  
-	- name: Make Sure Apache is running
+    - name: Make Sure Apache is running
       command: 	
 
     - name: add group "tomcat"
