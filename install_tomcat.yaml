@@ -6,7 +6,6 @@
   tasks:
     - name: Make sure that we can connect to the machine
       ping:
-	  
     - name: Make Sure Apache is running
       command: 	
 
@@ -34,6 +33,7 @@
 
     - name: wait for tomcat to start
       wait_for: port={{http_port}}
+      
   handlers:
     - name: start tomcat
       service: name=tomcat state=started	  
